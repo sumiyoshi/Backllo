@@ -1,0 +1,25 @@
+<div id="content" v-cloak>
+
+    <div id="application">
+        <div id="status-container">
+            <div v-for="status in statuses">
+                <div class="status">
+                    <div class="status_subject">
+                        {{status.name}}
+                    </div>
+
+                    <div v-for="issue in status.issues">
+                        <div class="task" >
+                            <span>{{issue.issueType.name}}</span>
+                            <div class="subject">{{issue.summary}}</div>
+                            <div class="info" v-if="issue.assignee">{{issue.assignee.name}}</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

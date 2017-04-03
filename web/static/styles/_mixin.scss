@@ -1,0 +1,6 @@
+@mixin shadow-box {
+  border-radius: 3px;
+  box-shadow: 1px 4px 17px -6px $shadow-color;
+  -moz-box-shadow: 1px 4px 17px -6px $shadow-color;
+  -webkit-box-shadow: 1px 4px 17px -6px $shadow-color;
+}
