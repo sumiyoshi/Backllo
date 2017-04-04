@@ -1,12 +1,13 @@
 defmodule Backllo.BacklogApi do
 
-  @backlog_api_url "https://%{space_name}.backlog.jp/api/v2/%{endpoint}?apiKey=%{api_key}"
+  @backlog_api_url "https://%{space_name}.backlog.jp/api/v2/%{endpoint}"
 
   @type headers :: [{binary, binary}] | %{binary => binary}
   @type body :: binary | {:form, [{atom, any}]} | {:file, binary}
 
   @spec get(binary, headers, Keyword.t) :: {Atom.t, Map.t}
   def get(url, headers \\ [], options \\ []) do
+
     url
     |> HTTPoison.get!(headers, options)
     |> do_response_decode
@@ -50,7 +51,6 @@ defmodule Backllo.BacklogApi do
     @backlog_api_url
     |> String.replace("%{endpoint}", endpoint)
     |> String.replace("%{space_name}", Application.get_env(:backllo, :backlog_space_name))
-    |> String.replace("%{api_key}", Application.get_env(:backllo, :backlog_api_key))
   end
 
   @spec do_response_decode(HTTPoison.Response.t) :: Tuple.t
