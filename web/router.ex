@@ -22,7 +22,7 @@ defmodule Backllo.Router do
    scope "/backlog_api", Backllo do
      pipe_through :api
 
-     scope "/v1", V1, as: :v1 do
+     scope "/v2", V2, as: :v2 do
         get "/issues/:id", BcklogApiController, :issues
         get "/statuses", BcklogApiController, :statuses
      end

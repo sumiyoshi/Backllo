@@ -1,4 +1,4 @@
-defmodule Backllo.V1.BcklogApiController do
+defmodule Backllo.V2.BcklogApiController do
   use Backllo.Web, :controller
 
   def issues(conn, %{"id" => id}) do

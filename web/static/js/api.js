@@ -1,5 +1,5 @@
 const request = require('superagent');
-const base_url = '/backlog_api/v1/';
+const base_url = '/backlog_api/v2/';
 
 export default class Api {
     get(url, params, cb) {
