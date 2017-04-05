@@ -21,6 +21,6 @@ defmodule Backllo.V2.BcklogApiController do
                   |> BacklogApi.generate_url("statuses")
                   |> BacklogApi.get()
 
-    json conn, Enum.filter(data, fn(map) -> map["name"] != "完了" end)
+    json conn, Enum.filter(data, &(&1["name"] != "完了"))
   end
 end
