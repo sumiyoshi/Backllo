@@ -17,13 +17,6 @@ defmodule Backllo.BacklogApi do
     |> do_cast_response
   end
 
-  @spec get_request_url(binary) :: binary
-  def get_request_url(endpoint) do
-    @backlog_api_url
-    |> String.replace("%{endpoint}", endpoint)
-    |> String.replace("%{space_name}", Application.get_env(:backllo, :backlog_space_name))
-  end
-
   @spec add_api_key(%Backllo.BacklogApiRequest{}) :: %Backllo.BacklogApiRequest{}
   def add_api_key(struct) do
     %{struct | params: Keyword.put(struct.params, :apiKey, Application.get_env(:backllo, :backlog_api_key))}
