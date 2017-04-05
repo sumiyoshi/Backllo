@@ -9,3 +9,4 @@ config :backllo, Backllo.Endpoint,
 config :logger, level: :info
 
 import_config "prod.secret.exs"
+import_config "backlog.secret.exs"

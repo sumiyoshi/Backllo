@@ -8,3 +8,7 @@ config :backllo, Backllo.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :backllo,
+backlog_space_name: "test",
+backlog_api_key: "test_key"
