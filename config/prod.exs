@@ -1,9 +1,12 @@
 use Mix.Config
 
 config :backllo, Backllo.Endpoint,
-  http: [:inet6, port: {:system, "PORT"}],
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/manifest.json"
+  http: [port: 80],
+  url: [host: "example.com"],
+  root: ".",
+  cache_static_manifest: "priv/static/manifest.json",
+  server: true,
+  version: Mix.Project.config[:version]
 
 # Do not print debug messages in production
 config :logger, level: :info
