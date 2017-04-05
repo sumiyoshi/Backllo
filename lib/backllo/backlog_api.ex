@@ -1,3 +1,7 @@
+defmodule Backllo.BacklogApiRequest do
+  defstruct url: nil, headers: [], params: [], form: [], file: nil
+end
+
 defmodule Backllo.BacklogApi do
 
   @backlog_api_url "https://%{space_name}.backlog.jp/api/v2/%{endpoint}"
@@ -5,43 +9,10 @@ defmodule Backllo.BacklogApi do
   @type headers :: [{binary, binary}] | %{binary => binary}
   @type body :: binary | {:form, [{atom, any}]} | {:file, binary}
 
-  @spec get(binary, headers, Keyword.t) :: {Atom.t, Map.t}
-  def get(url, headers \\ [], options \\ []) do
-
-    url
-    |> HTTPoison.get!(headers, options)
-    |> do_response_decode
-    |> do_cast_response
-  end
-
-  @spec put(binary, Map.t, headers, Keyword.t) :: {Atom.t, Map.t}
-  def put(url, body, headers \\ [], options \\ []) do
-    url
-    |> HTTPoison.put!(body, headers, options)
-    |> do_response_decode
-    |> do_cast_response
-  end
-
-  @spec post(binary, body, headers, Keyword.t) :: {Atom.t, Map.t}
-  def post(url, body, headers \\ [], options \\ []) do
-    url
-    |> HTTPoison.post!(body, headers, options)
-    |> do_response_decode
-    |> do_cast_response
-  end
-
-  @spec patch(binary, body, headers, Keyword.t) :: {Atom.t, Map.t}
-  def patch(url, body, headers \\ [], options \\ []) do
-    url
-    |> HTTPoison.patch!(body, headers, options)
-    |> do_response_decode
-    |> do_cast_response
-  end
-
-  @spec delete(binary, headers, Keyword.t) :: {Atom.t, Map.t}
-  def delete(url, headers \\ [], options \\ []) do
-    url
-    |> HTTPoison.delete!(headers, options)
+  @spec get(%Backllo.BacklogApiRequest{}) :: {Atom.t, Map.t}
+  def get(struct) do
+    struct.url
+    |> HTTPoison.get!(struct.headers, params: struct.params)
     |> do_response_decode
     |> do_cast_response
   end
@@ -51,6 +22,20 @@ defmodule Backllo.BacklogApi do
     @backlog_api_url
     |> String.replace("%{endpoint}", endpoint)
     |> String.replace("%{space_name}", Application.get_env(:backllo, :backlog_space_name))
+  end
+
+  @spec add_api_key(%Backllo.BacklogApiRequest{}) :: %Backllo.BacklogApiRequest{}
+  def add_api_key(struct) do
+    %{struct | params: Keyword.put(struct.params, :apiKey, Application.get_env(:backllo, :backlog_api_key))}
+  end
+
+  @spec generate_url(%Backllo.BacklogApiRequest{}, binary) :: %Backllo.BacklogApiRequest{}
+  def generate_url(struct, endpoint) do
+    url = @backlog_api_url
+          |> String.replace("%{endpoint}", endpoint)
+          |> String.replace("%{space_name}", Application.get_env(:backllo, :backlog_space_name))
+
+    %{struct | url: url}
   end
 
   @spec do_response_decode(HTTPoison.Response.t) :: Tuple.t
