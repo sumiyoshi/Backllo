@@ -6,7 +6,12 @@ defmodule Backllo.V2.BcklogApiController do
 
   def issues(conn, %{"id" => id}) do
 
-    case %BacklogApiRequest{params: [{:"statusId[]", id},{:apiKey, Application.get_env(:backllo, :backlog_api_key)}]}
+    case %BacklogApiRequest{params: [
+      {:"statusId[]", id},
+      {:sort, "updated"},
+      {:count, 100},
+      {:apiKey, Application.get_env(:backllo, :backlog_api_key)}
+    ]}
                   |> BacklogApi.generate_url(Application.get_env(:backllo, :backlog_space_name), "issues")
                   |> BacklogApi.get()
     do
