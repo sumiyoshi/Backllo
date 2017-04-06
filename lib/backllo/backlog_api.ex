@@ -17,16 +17,11 @@ defmodule Backllo.BacklogApi do
     |> do_cast_response
   end
 
-  @spec add_api_key(%Backllo.BacklogApiRequest{}) :: %Backllo.BacklogApiRequest{}
-  def add_api_key(struct) do
-    %{struct | params: Keyword.put(struct.params, :apiKey, Application.get_env(:backllo, :backlog_api_key))}
-  end
-
-  @spec generate_url(%Backllo.BacklogApiRequest{}, binary) :: %Backllo.BacklogApiRequest{}
-  def generate_url(struct, endpoint) do
+  @spec generate_url(%Backllo.BacklogApiRequest{}, binary, binary) :: %Backllo.BacklogApiRequest{}
+  def generate_url(struct, space_name, endpoint) do
     url = @backlog_api_url
           |> String.replace("%{endpoint}", endpoint)
-          |> String.replace("%{space_name}", Application.get_env(:backllo, :backlog_space_name))
+          |> String.replace("%{space_name}", space_name)
 
     %{struct | url: url}
   end

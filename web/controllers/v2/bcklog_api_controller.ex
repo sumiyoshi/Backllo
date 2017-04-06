@@ -6,21 +6,23 @@ defmodule Backllo.V2.BcklogApiController do
 
   def issues(conn, %{"id" => id}) do
 
-    {:ok, data} = %BacklogApiRequest{params: [{:"statusId[]", id}]}
-                  |> BacklogApi.add_api_key()
-                  |> BacklogApi.generate_url("issues")
+    case %BacklogApiRequest{params: [{:"statusId[]", id},{:apiKey, Application.get_env(:backllo, :backlog_api_key)}]}
+                  |> BacklogApi.generate_url(Application.get_env(:backllo, :backlog_space_name), "issues")
                   |> BacklogApi.get()
-
-    json conn, data
+    do
+      {:ok, data} -> render(conn, "issues.json", data: data)
+      {:error, errors} -> render(conn, "issues.json", errors: errors)
+    end
   end
 
   def statuses(conn, _params) do
 
-    {:ok, data} = %BacklogApiRequest{params: [{:test, "test"}]}
-                  |> BacklogApi.add_api_key()
-                  |> BacklogApi.generate_url("statuses")
-                  |> BacklogApi.get()
-
-    json conn, Enum.filter(data, &(&1["name"] != "完了"))
+    case %BacklogApiRequest{params: [{:apiKey, Application.get_env(:backllo, :backlog_api_key)}]}
+          |> BacklogApi.generate_url(Application.get_env(:backllo, :backlog_space_name), "statuses")
+          |> BacklogApi.get()
+    do
+      {:ok, data} -> render(conn, "statuses.json", data: Enum.filter(data, &(&1["name"] != "完了")))
+      {:error, errors} -> render(conn, "error.json", errors: errors)
+    end
   end
 end
